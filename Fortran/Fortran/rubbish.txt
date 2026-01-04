@@ -1,0 +1,274 @@
+
+    ! “00 00:00:00.000”(日 时分秒毫秒), msPart \in [0-24*60*60*1000+1, 24*60*60*1000-1]
+    subroutine sub_msPart2PartUsedDateTime(msPart, PartUsedDateTime)
+    implicit none
+    integer(kind=4), intent(in):: msPart
+    integer(kind=4), intent(out):: PartUsedDateTime(5)
+    
+    integer(kind=4):: DD, hh, mm, ss, ms, temp, absmsPart, msPartMax = 24*60*60*1000
+    
+    PartUsedDateTime = 0
+    if (msPart == 0) then
+        return
+    else if ((msPart > 0) .and. (msPart < msPartMax)) then
+        ms = mod(msPart, 1000)
+        PartUsedDateTime(5) = ms
+        temp = msPart / 1000
+        if (temp == 0) then
+            return
+        else
+            ss = mod(temp, 60)
+            PartUsedDateTime(4) = ss
+            temp = ss / 60
+            if (temp == 0) then
+                return
+            else
+                mm = mod(temp, 60)
+                PartUsedDateTime(3) = mm
+                temp = temp / 60
+                if (temp == 0) then
+                    return
+                else
+                    hh = mod(temp, 24)
+                    PartUsedDateTime(2) = hh
+                    temp = temp / 24
+                    if (temp == 0) then
+                        return
+                    else
+                        dd = temp
+                        PartUsedDateTime(1) = dd
+                        return
+                    end if
+                end if
+            end if
+        end if
+    else if ((msPart < 0) .and. (msPart > -msPartMax)) then
+        dd = -1        
+        PartUsedDateTime(1) = dd
+        absmsPart = abs(msPart)
+        ms = mod(absmsPart, 1000)
+        PartUsedDateTime(5) = ms
+        temp = absmsPart / 1000
+        if (temp == 0) then
+            return
+        else
+            ss = mod(temp, 60)
+            PartUsedDateTime(4) = ss
+            temp = ss / 60
+            if (temp == 0) then
+                return
+            else
+                mm = mod(temp, 60)
+                PartUsedDateTime(3) = mm
+                temp = temp / 60
+                if (temp == 0) then
+                    return
+                else
+                    hh = mod(temp, 24)
+                    PartUsedDateTime(2) = hh
+                    temp = temp / 24
+                    if (temp == 0) then
+                        return
+                    else
+                        dd = temp
+                        PartUsedDateTime(1) = dd
+                        return
+                    end if
+                end if
+            end if
+        end if
+
+        
+    
+    
+    ! 将时区信息转换为这样的字符串：“+08:00”
+    subroutine sub_zone2str(zone, str_zone)
+    implicit none
+    integer(kind=4), intent(in):: zone
+    character(len=6), intent(out):: str_zone
+    
+    integer(kind=4):: zone_hh, zone_mm, abs_zone
+    
+    if (zone == 0) then
+        str_zone = "+00:00"
+    else if(zone > 0) then
+        zone_hh = zone / 60
+        zone_mm = mod(zone, 60)
+        write(str_zone, "('+', i2.2, ':', i2.2)") zone_hh, zone_mm
+    else 
+        abs_zone = abs(zone)
+        zone_hh = abs_zone / 60
+        zone_mm = mod(abs_zone, 60)
+        write(str_zone, "('-', i2.2, ':', i2.2)") zone_hh, zone_mm
+    end if
+    
+    return
+    end subroutine sub_zone2str
+
+        
+        
+    
+    
+    ! 利用date_and_time([date,time,zone,values])中的values(1:8)计算所用时间
+    subroutine sub_msUsedTime(DateTime1, DateTime2, msUsedTime)
+    implicit none
+    integer(kind=4), intent(in):: DateTime1(8), DateTime2(8)
+    integer(kind=8), intent(out):: msUsedTime
+    
+    integer(kind=4):: UTCtime1(8), UTCtime2(8)
+    integer(kind=8):: msTime1, msTime2
+    
+    msUsedTime = 0
+    if (all(DateTime1 == DateTime2)) return
+    
+    call sub_Time2UTC(DateTime1, UTCtime1)
+    call sub_Time2UTC(DateTime2, UTCtime2)
+    
+    if (all(UTCtime1 == UTCtime2)) return
+    
+    call sub_UTCtime2msTime(UTCtime1, msTime1)
+    call sub_UTCtime2msTime(UTCtime2, msTime2)
+    
+    msUsedTime = msTime2 - msTime1
+    
+    return
+    end subroutine sub_msUsedTime    
+    
+    
+    ! 将当地时间转换成UTC时间
+    subroutine sub_Time2UTC(DateTime, UTCtime)
+    implicit none
+    integer(kind=4), intent(in):: DateTime(8)    
+    integer(kind=4), intent(out):: UTCtime(8)
+
+    integer(kind=4):: YY, Mo, DD, zone, hh, mm, ss, ms, mmTotal, UTCmmTotal, DDoffset
+    
+    UTCtime = DateTime
+    if (DateTime(4) == 0) return
+    UTCtime(4) = 0
+    
+    YY = DateTime(1)
+    Mo = DateTime(2)
+    DD = DateTime(3)
+    zone = DateTime(4)
+    hh = DateTime(5)
+    mm = DateTime(6)
+    
+    
+    mmTotal = hh * 60 + mm
+    UTCmmTotal = mmTotal - zone
+    
+    if (UTCmmTotal == 0) then
+        mm = 0
+        hh = 0
+        UTCtime(5) = hh
+        UTCtime(6) = mm
+        return
+    else if (UTCmmTotal > 0) then
+        mm = mod(UTCmmTotal, 60)
+        hh = UTCmmTotal / 60
+        UTCtime(5) = hh
+        UTCtime(6) = mm
+        DDoffset = hh / 24
+        if (DDoffset == 0) then
+            return
+        else
+            hh = hh - 24
+            DD = DD + 1
+            UTCtime(5) = hh
+        end if
+    else
+        DD = DD - 1
+        UTCmmTotal = UTCmmTotal + 24 * 60
+        mm = mod(UTCmmTotal, 60)
+        hh = UTCmmTotal / 60
+        UTCtime(5) = hh
+        UTCtime(6) = mm
+    end if
+    
+    call sub_adjustDate(YY, Mo, DD)
+    UTCtime(1) = YY
+    UTCtime(2) = Mo
+    UTCtime(3) = DD
+    
+    return
+    end subroutine sub_Time2UTC
+    
+    
+    ! 修正日期, 未考虑初始日期不规范的问题。
+    subroutine sub_adjustDate(YY, Mo, DD)
+    implicit none
+    integer(kind=4), intent(inout):: YY, Mo, DD
+    
+    integer(kind=4):: dateINmonth(12) = (/ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
+    
+    if (((mod(YY, 4) == 0) .and. (mod(YY, 100) /= 0)) .or. (mod(YY, 400) == 0)) dateINmonth(2) = 29
+    
+    if (DD < 1) then
+        Mo = Mo - 1
+        if (Mo < 1) then
+            YY = YY - 1
+            Mo = 12
+            DD = 31
+            return
+        else
+            DD = dateINmonth(Mo)
+            return
+        end if
+    end if
+    
+    if (DD > dateINmonth(Mo)) then
+        Mo = Mo + 1
+        DD = 1
+        if (Mo > 12) then
+            YY = YY + 1
+            Mo = 1
+            return
+        end if
+        return
+    end if
+    
+    return
+    end subroutine sub_adjustDate
+    
+    
+    ! 从(+00:00 2026/01/01 00:00:00.000)开始计算
+    subroutine sub_UTCtime2msTime(UTCtime, msTime)
+    implicit none 
+    integer(kind=4), intent(in):: UTCtime(8)
+    integer(kind=8), intent(out):: msTime
+    
+    integer(kind=4):: dateINmonth(12) = (/ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
+    integer(kind=4):: YY, Mo, DD, zone, hh, mm, ss, ms, i
+    integer(kind=8):: int8hh, int8mm, int8ss
+    
+    YY = UTCtime(1)
+    Mo = UTCtime(2)
+    DD = UTCtime(3)
+    zone = UTCtime(4)
+    hh = UTCtime(5)
+    mm = UTCtime(6)
+    ss = UTCtime(7)
+    ms = UTCtime(8)
+    
+    if (((mod(YY, 4) == 0) .and. (mod(YY, 100) /= 0)) .or. (mod(YY, 400) == 0)) dateINmonth(2) = 29
+
+    do i = 1, (Mo - 1), 1
+        DD = DD + dateINmonth(i)
+    end do
+    
+    do i = 2026, (YY - 1), 1
+        if (((mod(i, 4) == 0) .and. (mod(i, 100) /= 0)) .or. (mod(i, 400) == 0)) then
+            DD = DD + 366
+        else
+            DD = DD + 365
+        end if
+    end do
+    
+    int8hh = DD * 24 + hh
+    int8mm = int8hh * 60 + mm
+    int8ss = int8mm * 60 + ss
+    msTime = int8ss * 1000 + ms
+    
+    return
+    end subroutine sub_UTCtime2msTime
