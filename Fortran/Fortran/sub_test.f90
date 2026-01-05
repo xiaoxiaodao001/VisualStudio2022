@@ -34,13 +34,16 @@
     !call sub02_msUsedTime(DateTime1, DateTime2, msUsedTime)
     !call sub_msTime2str(msUsedTime, str_msTime)
     
-    character(len=256):: DirName = "dir01/", LogName = "log.txt", str
-    call sub_mkdir(DirName)
-    LogName = trim(DirName) // trim(LogName)
-    str = "第一行记录"
-    call sub_Logging(LogName, str)
-    str = "第二行记录"
-    call sub_Logging(LogName, str)
+    !character(len=256):: DirName = "dir01/", LogName = "log.txt", str = ' '
+    !call sub_mkdir(DirName)
+    !LogName = trim(DirName) // trim(LogName)
+    !str = "第一行记录"
+    !call sub_Logging(LogName, str)
+    !str = "第二行记录"
+    !call sub_Logging(LogName, str)
+    
+    integer(kind=4):: nums(4) = (/ 1, 2, 3, 4 /), targ = 3, inde(2)
+    call sub_twosum(size(nums), nums, targ, inde)
     
     return
     end subroutine sub_test

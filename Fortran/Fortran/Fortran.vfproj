@@ -54,14 +54,12 @@
 		<Filter Name="Header Files" Filter="fi;fd;h;inc"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
-			<File RelativePath=".\main.f90">
+			<File RelativePath=".\LeeCode001.f90">
 			</File>
-			<File RelativePath=".\rubbish.txt">
-			</File>
-			<File RelativePath=".\sub_File.f90">
-			</File>
-			<File RelativePath=".\sub_test.f90">
-			</File>
+			<File RelativePath=".\main.f90"/>
+			<File RelativePath=".\rubbish.txt"/>
+			<File RelativePath=".\sub_File.f90"/>
+			<File RelativePath=".\sub_test.f90"/>
 		</Filter>
 	</Files>
 	<Globals/>
