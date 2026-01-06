@@ -56,5 +56,28 @@
     
         return
         end subroutine sub_addTwoNumbers
+        
+        
+        subroutine sub_lengthOfLongestSubstring(s, n)
+        implicit none
+        character(len=*), intent(in):: s
+        integer(kind=4), intent(out):: n
+        
+        integer(kind=4):: slen, i, j, k, n1
+        n = 1
+        slen = len(s)
+        do i = 1, slen, 1
+            loop2: do j = i+1, slen, 1
+                do k = i, j-1, 1
+                    if (s(j:j) == s(k:k)) exit loop2
+                end do
+            end do loop2
+            n1 = j - i
+            n = max(n, n1)
+            if (n > (slen - i + 1)) exit
+        end do
+        
+        return
+        end subroutine sub_lengthOfLongestSubstring
     
     end module mod_LeeCode001

@@ -44,10 +44,17 @@
     
     !integer(kind=4):: nums(4) = (/ 1, 2, 3, 4 /), targ = 3, inde(2)
     !call sub_twosum(size(nums), nums, targ, inde)
+    !use mod_LeeCode001
+    !integer(kind=4):: l1(7) = (/ 9, 9, 9, 9, 9, 9, 9 /), l2(4) = (/ 9, 9, 9, 9 /)
+    !integer(kind=4), allocatable:: l3(:)
+    !call sub_addTwoNumbers(size(l1), l1, size(l2), l2, l3)
+    
     use mod_LeeCode001
-    integer(kind=4):: l1(7) = (/ 9, 9, 9, 9, 9, 9, 9 /), l2(4) = (/ 9, 9, 9, 9 /)
-    integer(kind=4), allocatable:: l3(:)
-    call sub_addTwoNumbers(size(l1), l1, size(l2), l2, l3)
+    character(len=6):: s = "pwwkew"
+    integer(kind=4):: n
+    call sub_lengthOfLongestSubstring(s, n)
+    print *, n
+    
     
     return
     end subroutine sub_test
