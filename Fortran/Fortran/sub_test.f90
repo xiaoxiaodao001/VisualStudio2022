@@ -1,6 +1,6 @@
 
     subroutine sub_test
-    implicit none
+    !implicit none
     !character(len=256):: dirname = "dir01/"    
     !call sub_mkdir(dirname)
     !integer(kind=4):: zone = 0
@@ -42,8 +42,12 @@
     !str = "第二行记录"
     !call sub_Logging(LogName, str)
     
-    integer(kind=4):: nums(4) = (/ 1, 2, 3, 4 /), targ = 3, inde(2)
-    call sub_twosum(size(nums), nums, targ, inde)
+    !integer(kind=4):: nums(4) = (/ 1, 2, 3, 4 /), targ = 3, inde(2)
+    !call sub_twosum(size(nums), nums, targ, inde)
+    use mod_LeeCode001
+    integer(kind=4):: l1(7) = (/ 9, 9, 9, 9, 9, 9, 9 /), l2(4) = (/ 9, 9, 9, 9 /)
+    integer(kind=4), allocatable:: l3(:)
+    call sub_addTwoNumbers(size(l1), l1, size(l2), l2, l3)
     
     return
     end subroutine sub_test
