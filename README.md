@@ -366,3 +366,83 @@ A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdir
     
     end module mod_LeeCode001
 ```
+
+### 5 最长回文子串
+给你一个字符串`s`，找到`s`中最长的
+[回文](https://leetcode.cn/ "回文性：如果字符向前和向后读都相同，则它满足回文性")
+[子串](https://leetcode.cn/ "子字符串是字符串中连续的 非空 字符序列")。  
+示例 1：
+>输入：s = "babad"  
+输出："bab"  
+解释："aba" 同样是符合题意的答案。  
+
+示例 2：
+>输入：s = "cbbd"  
+输出："bb"  
+
+提示：  
+- `1 <= s.length <= 1000`  
+- `s`仅由数字和英文字母组成  
+
+我的答案
+```fortran
+    
+    use mod_LeeCode001
+    character(len=256):: s = 'cbbd'
+    character(len=:), allocatable:: subPs
+    
+    call sub_longestPalindrome(trim(s), subPs)
+    print *, subPs
+
+
+
+    module mod_LeeCode001
+    implicit none
+    contains
+        
+        subroutine sub_longestPalindrome(s, subPs)
+        implicit none
+        character(len=*), intent(in):: s
+        character(len=:), allocatable, intent(out):: subPs
+        
+        character(len=:), allocatable:: temp
+        integer(kind=4):: i, j, slen, sublen, k, lenmid, i1, j1, len1, i2, j2, len2
+        
+        slen = len(s)
+        i1 = 1
+        j1 = 1
+        len1 = 1
+        do i = 1, slen, 1
+            do j = slen, i, -1
+                sublen = j - i + 1
+                lenmid = sublen / 2
+                k = 0
+                do while(k < lenmid)
+                    if (s(i+k : i+k) == s(j-k : j-k)) then
+                        k = k + 1
+                    else
+                        exit
+                    end if                    
+                end do
+                if (k == lenmid) then
+                    i2 = i
+                    j2 = j
+                    len2 = sublen
+                    if (len2 > len1) then
+                        len1 = len2
+                        i1 = i2
+                        j1 = j2
+                    end if
+                    if (len1 > (slen-i+1)) exit
+                else
+                    cycle
+                end if                
+            end do
+        end do
+        subPs = s(i1 : j1)
+        
+        return
+        end subroutine sub_longestPalindrome
+    
+    end module mod_LeeCode001
+```

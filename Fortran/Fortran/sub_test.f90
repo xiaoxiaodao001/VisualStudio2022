@@ -55,11 +55,18 @@
     !call sub_lengthOfLongestSubstring(s, n)
     !print *, n
     
+    !use mod_LeeCode001
+    !integer(kind=4):: nums1(5) = (/ 1, 4, 5, 6, 7/), nums2(2) = (/ 2, 3 /)
+    !real(kind=8):: mid
+    !call sub_findMedianSortedArrays(size(nums1), nums1, size(nums2), nums2, mid)
+    !print *, mid
+    
     use mod_LeeCode001
-    integer(kind=4):: nums1(5) = (/ 1, 4, 5, 6, 7/), nums2(2) = (/ 2, 3 /)
-    real(kind=8):: mid
-    call sub_findMedianSortedArrays(size(nums1), nums1, size(nums2), nums2, mid)
-    print *, mid
+    character(len=256):: s = 'cbbd'
+    character(len=:), allocatable:: subPs
+    
+    call sub_longestPalindrome(trim(s), subPs)
+    print *, subPs
     
     return
     end subroutine sub_test
