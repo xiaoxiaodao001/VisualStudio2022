@@ -287,3 +287,82 @@ A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdir
     end module mod_LeeCode001
 
 ```
+
+### 4 寻找两个正序数组的中位数
+给定两个大小分别为`m`和`n`的正序（从小到大）数组`nums1`和`nums2`。请你找出并返回这两个正序数组的**中位数**。  
+
+算法的时间复杂度应该为`O(log (m+n))`。  
+
+示例1  
+>**输入**：nums1 = [1,3], nums2 = [2]  
+**输出**：2.00000  
+**解释**：合并数组 = [1,2,3] ，中位数 2  
+
+示例2  
+>**输入**：nums1 = [1,2], nums2 = [3,4]  
+**输出**：2.50000  
+**解释**：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5  
+
+提示：  
+- `nums1.length == m`
+- `nums2.length == n`
+- `0 <= m <= 1000`
+- `0 <= n <= 1000`
+- `1 <= m + n <= 2000`
+- `-10^6 <= nums1[i], nums2[i] <= 10^6`
+
+我的答案
+```fortran
+    use mod_LeeCode001
+    integer(kind=4):: nums1(5) = (/ 1, 4, 5, 6, 7/), nums2(2) = (/ 2, 3 /)
+    real(kind=8):: mid
+    call sub_findMedianSortedArrays(size(nums1), nums1, size(nums2), nums2, mid)
+    print *, mid
+
+    module mod_LeeCode001
+    implicit none
+    contains
+        subroutine sub_findMedianSortedArrays(m, nums1, n, nums2, mid)
+        implicit none 
+        integer(kind=4), intent(in):: m, nums1(m), n, nums2(n)
+        real(kind=8), intent(out):: mid
+        
+        integer(kind=4):: i, j, idx, arr(m+n), i1, j1, ntotal, idxmid
+        
+        !av = (sum(m) + sum(n)) / (m + n)
+        idx = 0
+        i = 1
+        j = 1
+        do while ((i <= m) .and. (j <= n))
+            idx = idx + 1
+            if(nums1(i) <= nums2(j)) then
+                arr(idx) = nums1(i)
+                i = i + 1
+            else
+                arr(idx) = nums2(j)
+                j = j + 1
+            end if
+        end do
+        
+        do i1 = i, m, 1
+            idx = idx + 1
+            arr(idx) = nums1(i1)
+        end do
+        do j1 = j, n, 1
+            idx = idx + 1
+            arr(idx) = nums2(j1)
+        end do
+        
+        ntotal = m + n
+        idxmid = ntotal / 2
+        if (mod(ntotal, 2) == 0) then
+            mid = real((arr(idxmid) + arr(idxmid + 1)), kind=8) / 2.d0
+        else
+            mid = real(arr(idxmid+1), kind=8)
+        end if
+        
+        return
+        end subroutine sub_findMedianSortedArrays
+    
+    end module mod_LeeCode001
+```

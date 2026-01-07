@@ -49,12 +49,17 @@
     !integer(kind=4), allocatable:: l3(:)
     !call sub_addTwoNumbers(size(l1), l1, size(l2), l2, l3)
     
-    use mod_LeeCode001
-    character(len=6):: s = "pwwkew"
-    integer(kind=4):: n
-    call sub_lengthOfLongestSubstring(s, n)
-    print *, n
+    !use mod_LeeCode001
+    !character(len=6):: s = "pwwkew"
+    !integer(kind=4):: n
+    !call sub_lengthOfLongestSubstring(s, n)
+    !print *, n
     
+    use mod_LeeCode001
+    integer(kind=4):: nums1(5) = (/ 1, 4, 5, 6, 7/), nums2(2) = (/ 2, 3 /)
+    real(kind=8):: mid
+    call sub_findMedianSortedArrays(size(nums1), nums1, size(nums2), nums2, mid)
+    print *, mid
     
     return
     end subroutine sub_test

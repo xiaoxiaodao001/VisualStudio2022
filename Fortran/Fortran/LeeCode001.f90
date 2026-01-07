@@ -79,5 +79,48 @@
         
         return
         end subroutine sub_lengthOfLongestSubstring
+        
+        
+        subroutine sub_findMedianSortedArrays(m, nums1, n, nums2, mid)
+        implicit none 
+        integer(kind=4), intent(in):: m, nums1(m), n, nums2(n)
+        real(kind=8), intent(out):: mid
+        
+        integer(kind=4):: i, j, idx, arr(m+n), i1, j1, ntotal, idxmid
+        
+        !av = (sum(m) + sum(n)) / (m + n)
+        idx = 0
+        i = 1
+        j = 1
+        do while ((i <= m) .and. (j <= n))
+            idx = idx + 1
+            if(nums1(i) <= nums2(j)) then
+                arr(idx) = nums1(i)
+                i = i + 1
+            else
+                arr(idx) = nums2(j)
+                j = j + 1
+            end if
+        end do
+        
+        do i1 = i, m, 1
+            idx = idx + 1
+            arr(idx) = nums1(i1)
+        end do
+        do j1 = j, n, 1
+            idx = idx + 1
+            arr(idx) = nums2(j1)
+        end do
+        
+        ntotal = m + n
+        idxmid = ntotal / 2
+        if (mod(ntotal, 2) == 0) then
+            mid = real((arr(idxmid) + arr(idxmid + 1)), kind=8) / 2.d0
+        else
+            mid = real(arr(idxmid+1), kind=8)
+        end if
+        
+        return
+        end subroutine sub_findMedianSortedArrays
     
     end module mod_LeeCode001
