@@ -68,12 +68,17 @@
     !call sub_longestPalindrome(trim(s), subPs)
     !print *, subPs
     
-    use mod_LeeCode001
-    character(len=256):: s = 'PAYPALISHIRING', sNew = ' '
-    integer(kind=4):: numRows = 4
+    !use mod_LeeCode001
+    !character(len=256):: s = 'PAYPALISHIRING', sNew = ' '
+    !integer(kind=4):: numRows = 4
+    !
+    !call sub_convert(trim(s), numRows, sNew)
+    !print *, trim(sNew)
     
-    call sub_convert(trim(s), numRows, sNew)
-    print *, trim(sNew)
+    use mod_LeeCode001
+    integer(kind=4):: x = -huge(1)-1, xr
+    call sub_reverse(x, xr)
+    print *, xr
     
     return
     end subroutine sub_test

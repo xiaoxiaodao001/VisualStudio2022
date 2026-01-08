@@ -130,7 +130,7 @@
         character(len=:), allocatable, intent(out):: subPs
         
         character(len=:), allocatable:: temp
-        integer(kind=4):: i, j, slen, sublen, k, lenmid, i1, j1, len1, i2, j2, len2
+        integer(kind=4):: i, j, slen, sublen, k, lenmid, i1, j1, len1, len2
         
         slen = len(s)
         i1 = 1
@@ -215,5 +215,48 @@
         
         return
         end subroutine sub_convert
+        
+        
+        
+        subroutine sub_reverse(x, xr)
+        implicit none
+        integer(kind=4), intent(in):: x
+        integer(kind=4), intent(out):: xr
+        
+        integer(kind=4):: i, xi, temp2, j, ie, int4 = 1
+        integer(kind=8):: xabs, temp, xrtemp, int8_10 = 10
+        
+        xr = 0
+        if (x == 0) return
+        
+        !xsign = sign(1, x)
+        xabs = abs(int(x, kind=8))
+        temp = xabs
+        !temp2 = 0
+        !i = -1
+        xrtemp = 0
+        !do while(temp < xabs)
+        do while(temp > 0)
+            !i = i + 1
+            !xi(i) = mod(temp2, 10)
+            xi = mod(temp, 10)
+            !temp = temp + xi(i) * 10 ** i
+            !temp = temp + xi * 10 ** i
+            !temp2 = temp2 / 10
+            temp = temp / 10
+            xrtemp = xrtemp * 10 + xi
+        end do
+        
+        !xrtemp = 0
+        !do j = 0, i, 1
+        !    ie = i - j
+        !    xrtemp = xrtemp + xi(j) * int8_10 ** ie
+        !end do
+        xrtemp = sign(xrtemp, x)
+        
+        if (((-huge(int4)-1) <= xrtemp) .and. (xrtemp <= huge(int4))) xr = xrtemp
+        
+        return
+        end subroutine sub_reverse
     
     end module mod_LeeCode001

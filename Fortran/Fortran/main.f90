@@ -8,6 +8,7 @@
     !print "(sp, i3.2, ss, i2.2)", -12, 12
     print "(i, i)", 1, 2
     print *, (a == b)
+    print *, abs(int(-huge(1)-1, kind=8))
     !b = a(4:1:-1)
     !print *, b
     !print *, size((/1, 2/))
