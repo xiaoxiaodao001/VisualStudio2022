@@ -157,17 +157,18 @@ A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdir
 请你将两个数相加，并以相同形式返回一个表示和的链表。  
 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。  
 
-**示例1**
+**示例1**  
+
 ![](./images/Leecode002_addtwonumber1.jpg)  
 >输入：l1 = [2,4,3], l2 = [5,6,4]  
 输出：[7,0,8]  
 解释：342 + 465 = 807.
 
-**示例2**
+**示例2**  
 >输入：l1 = [0], l2 = [0]  
 输出：[0]  
 
-**示例3**
+**示例3**  
 >输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]  
 输出：[8,9,9,9,0,0,0,1]  
 
@@ -445,4 +446,106 @@ A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdir
         end subroutine sub_longestPalindrome
     
     end module mod_LeeCode001
+```
+
+### 6 Z字形变换  
+将一个给定字符串`s`根据给定的行数`numRows`，以从上往下、从左到右进行Z字形排列。  
+
+比如输入字符串为`"PAYPALISHIRING"`行数为`3`时，排列如下：  
+>P   A   H   N  
+A P L S I I G  
+Y   I   R  
+
+之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如：`"PAHNAPLSIIGYIR"`。  
+
+请你实现这个将字符串进行指定行数变换的函数：  
+>string convert(string s, int numRows);  
+
+**示例 1：**  
+>输入：s = "PAYPALISHIRING", numRows = 3  
+输出："PAHNAPLSIIGYIR"  
+
+**示例 2：**  
+>输入：s = "PAYPALISHIRING", numRows = 4  
+输出："PINALSIGYAHRPI"  
+解释：  
+P     I    N  
+A   L S  I G  
+Y A   H R  
+P     I  
+
+**示例 3：**  
+>输入：s = "A", numRows = 1  
+输出："A"  
+
+**提示：**  
+- `1 <= s.length <= 1000`  
+- `s` 由英文字母（小写和大写）、`','`和`'.'`组成  
+- `1 <= numRows <= 1000`  
+
+我的答案
+```fortran
+    
+    use mod_LeeCode001
+    character(len=256):: s = 'PAYPALISHIRING', sNew = ' '
+    integer(kind=4):: numRows = 4
+    
+    call sub_convert(trim(s), numRows, sNew)
+    print *, trim(sNew)
+
+
+
+    module mod_LeeCode001
+    implicit none
+    contains
+        
+        subroutine sub_convert(s, numRows, sNew)
+        character(len=*), intent(in):: s
+        integer(kind=4), intent(in):: numRows
+        character(len=len(s)), intent(out):: sNew
+        
+        integer(kind=4):: i, ind, slen, indNew, T, T1, T2
+        
+        slen = len(s)
+        if (numRows == 1) then
+            sNew = s
+            return
+        end if
+        
+        T = numRows + numRows - 2
+        indNew = 0
+        i = 1
+        ind = i
+        do while(ind <= slen)
+            indNew = indNew + 1
+            sNew(indNew : indNew) = s(ind : ind)
+            ind = ind + T
+        end do
+        do i = 2, numRows-1, 1
+            ind = i
+            T2 = i + i - 2
+            T1 = T - T2
+            do while(ind <= slen)
+                indNew = indNew + 1
+                sNew(indNew : indNew) = s(ind : ind)
+                ind = ind + T1
+                if (ind <= slen) then
+                    indNew = indNew + 1
+                    sNew(indNew : indNew) = s(ind : ind)
+                    ind = ind + T2
+                end if
+            end do
+        end do
+        i = numRows
+        ind = i
+        do while(ind <= slen)
+            indNew = indNew + 1
+            sNew(indNew : indNew) = s(ind : ind)
+            ind = ind + T
+        end do
+        
+        return
+        end subroutine sub_convert
+    
+    end module mod_LeeCode001  
 ```

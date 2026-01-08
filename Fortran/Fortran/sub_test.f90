@@ -61,12 +61,19 @@
     !call sub_findMedianSortedArrays(size(nums1), nums1, size(nums2), nums2, mid)
     !print *, mid
     
-    use mod_LeeCode001
-    character(len=256):: s = 'cbbd'
-    character(len=:), allocatable:: subPs
+    !use mod_LeeCode001
+    !character(len=256):: s = 'cbbd'
+    !character(len=:), allocatable:: subPs
+    !
+    !call sub_longestPalindrome(trim(s), subPs)
+    !print *, subPs
     
-    call sub_longestPalindrome(trim(s), subPs)
-    print *, subPs
+    use mod_LeeCode001
+    character(len=256):: s = 'PAYPALISHIRING', sNew = ' '
+    integer(kind=4):: numRows = 4
+    
+    call sub_convert(trim(s), numRows, sNew)
+    print *, trim(sNew)
     
     return
     end subroutine sub_test

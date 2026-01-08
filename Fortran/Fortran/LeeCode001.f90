@@ -149,13 +149,11 @@
                     end if                    
                 end do
                 if (k == lenmid) then
-                    i2 = i
-                    j2 = j
                     len2 = sublen
                     if (len2 > len1) then
                         len1 = len2
-                        i1 = i2
-                        j1 = j2
+                        i1 = i
+                        j1 = j
                     end if
                     if (len1 > (slen-i+1)) exit
                 else
@@ -167,5 +165,55 @@
         
         return
         end subroutine sub_longestPalindrome
+        
+        
+        
+        subroutine sub_convert(s, numRows, sNew)
+        character(len=*), intent(in):: s
+        integer(kind=4), intent(in):: numRows
+        character(len=len(s)), intent(out):: sNew
+        
+        integer(kind=4):: i, ind, slen, indNew, T, T1, T2
+        
+        slen = len(s)
+        if (numRows == 1) then
+            sNew = s
+            return
+        end if
+        
+        T = numRows + numRows - 2
+        indNew = 0
+        i = 1
+        ind = i
+        do while(ind <= slen)
+            indNew = indNew + 1
+            sNew(indNew : indNew) = s(ind : ind)
+            ind = ind + T
+        end do
+        do i = 2, numRows-1, 1
+            ind = i
+            T2 = i + i - 2
+            T1 = T - T2
+            do while(ind <= slen)
+                indNew = indNew + 1
+                sNew(indNew : indNew) = s(ind : ind)
+                ind = ind + T1
+                if (ind <= slen) then
+                    indNew = indNew + 1
+                    sNew(indNew : indNew) = s(ind : ind)
+                    ind = ind + T2
+                end if
+            end do
+        end do
+        i = numRows
+        ind = i
+        do while(ind <= slen)
+            indNew = indNew + 1
+            sNew(indNew : indNew) = s(ind : ind)
+            ind = ind + T
+        end do
+        
+        return
+        end subroutine sub_convert
     
     end module mod_LeeCode001
