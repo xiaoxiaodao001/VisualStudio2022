@@ -80,23 +80,29 @@
     !call sub_reverse(x, xr)
     !print *, xr
     
+    !use mod_LeeCode001
+    !character(len=200):: s1 = "42"
+    !character(len=200):: s2 = " -042"
+    !character(len=200):: s3 = "1337c0d3"
+    !character(len=200):: s4 = "0-1"
+    !character(len=200):: s5 = "words and 987"
+    !integer(kind=4):: x
+    !call sub_myAtoi(s1, x)
+    !print *, x
+    !call sub_myAtoi(s2, x)
+    !print *, x
+    !call sub_myAtoi(s3, x)
+    !print *, x
+    !call sub_myAtoi(s4, x)
+    !print *, x
+    !call sub_myAtoi(s5, x)
+    !print *, x
+    
     use mod_LeeCode001
-    character(len=200):: s1 = "42"
-    character(len=200):: s2 = " -042"
-    character(len=200):: s3 = "1337c0d3"
-    character(len=200):: s4 = "0-1"
-    character(len=200):: s5 = "words and 987"
-    integer(kind=4):: x
-    call sub_myAtoi(s1, x)
-    print *, x
-    call sub_myAtoi(s2, x)
-    print *, x
-    call sub_myAtoi(s3, x)
-    print *, x
-    call sub_myAtoi(s4, x)
-    print *, x
-    call sub_myAtoi(s5, x)
-    print *, x
+    integer(kind=4):: x = 1234
+    logical(kind=4):: ISorNOT
+    call sub_isPalindrome(x, ISorNOT)
+    print *, ISorNOT
     
     return
     end subroutine sub_test

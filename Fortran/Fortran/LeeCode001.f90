@@ -9,7 +9,7 @@
         integer(kind=4), intent(out):: inde(2)
         integer(kind=4):: i, j, temp
     
-        do i = 1, n, 1
+        do i = 1, n-1, 1
             temp = targ - nums(i)
             do j = i+1, n, 1
                 !if (targ == (nums(i) + nums(j))) then
@@ -229,29 +229,15 @@
         xr = 0
         if (x == 0) return
         
-        !xsign = sign(1, x)
         xabs = abs(int(x, kind=8))
         temp = xabs
-        !temp2 = 0
-        !i = -1
         xrtemp = 0
-        !do while(temp < xabs)
         do while(temp > 0)
-            !i = i + 1
-            !xi(i) = mod(temp2, 10)
             xi = mod(temp, 10)
-            !temp = temp + xi(i) * 10 ** i
-            !temp = temp + xi * 10 ** i
-            !temp2 = temp2 / 10
             temp = temp / 10
             xrtemp = xrtemp * 10 + xi
         end do
         
-        !xrtemp = 0
-        !do j = 0, i, 1
-        !    ie = i - j
-        !    xrtemp = xrtemp + xi(j) * int8_10 ** ie
-        !end do
         xrtemp = sign(xrtemp, x)
         
         if (((-huge(int4)-1) <= xrtemp) .and. (xrtemp <= huge(int4))) xr = xrtemp
@@ -323,5 +309,37 @@
         
         return
         end subroutine sub_myAtoi
+        
+        
+        
+        subroutine sub_isPalindrome(x, ISorNOT)
+        implicit none
+        integer(kind=4), intent(in):: x
+        logical(kind=4), intent(out):: ISorNOT
+        
+        integer(kind=4):: xi(10), i, temp
+        
+        ISorNOT = .false.
+        if (x < 0) return
+        if ((0 <= x) .and. (x <= 9)) then
+            ISorNOT = .true.
+            return
+        end if
+        
+        temp = x
+        i = 0
+        do while(temp > 0)
+            i = i + 1
+            xi(i) = mod(temp, 10)
+            temp = temp / 10
+        end do
+        
+        if (all(xi(1 : i) == xi (i : 1 : -1))) then
+            ISorNOT = .true.
+            return
+        end if
+        
+        return
+        end subroutine sub_isPalindrome
     
     end module mod_LeeCode001

@@ -2,13 +2,16 @@
     program main
     implicit none
     character(len=4):: a='1234', b = '1234'
+    integer(kind=4):: d(4) = (/ 1, 2, 2, 1 /), e(4)
     !integer(kind=4):: i
     !real(kind=8):: pi = 3.14159265358979323846d0, mu_0 = 4.d0 * pi * 1.d-7
     !print *, "Hello, world."
     !print "(sp, i3.2, ss, i2.2)", -12, 12
-    print "(i, i)", 1, 2
-    print *, (a == b)
-    print *, abs(int(-huge(1)-1, kind=8))
+    !print "(i, i)", 1, 2
+    !print *, (a == b)
+    !print *, abs(int(-huge(1)-1, kind=8))
+    e = d(4:1:-1)
+    print *, (e == d)
     !b = a(4:1:-1)
     !print *, b
     !print *, size((/1, 2/))
