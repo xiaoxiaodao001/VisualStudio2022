@@ -258,5 +258,70 @@
         
         return
         end subroutine sub_reverse
+        
+        
+        
+        subroutine sub_myAtoi(s, x)
+        character(len=*), intent(in):: s
+        integer(kind=4), intent(out):: x
+        
+        character(len=1):: si = ' '
+        integer(kind=4):: slen, i, int4 = 1, xi, xsign, ichar_0
+        integer(kind=8):: temp, int4huge
+        
+        x = 0
+        slen = len(s)
+        if (slen == 0) return
+        ! char, ichar
+        i = 0
+        do while ((si == ' ') .and. (i < slen))
+            i = i + 1
+            si = s(i:i)
+        end do
+        
+        xsign = 1
+        if (si == '-') then
+            xsign = -1
+            i = i + 1
+            if (i <= slen) then
+                si = s(i:i)
+            else
+                return
+            end if
+        end if
+        if (si == '+') then
+            i = i + 1
+            if (i <= slen) then
+                si = s(i:i)
+            else
+                return
+            end if
+        end if
+        int4huge = huge(int4)
+        ichar_0 = ichar('0')
+        do while ((si == '0') .and. (i < slen))
+            i = i + 1
+            si = s(i:i)
+        end do
+        
+        temp = 0       
+        do while (('0' <= si) .and. (si <= '9') .and. (i < slen))
+            xi = ichar(si) - ichar_0
+            temp = temp * 10 + xi
+            if (temp > (int4huge + 1)) exit
+            i = i + 1
+            si = s(i:i)
+        end do
+        temp = temp * xsign
+        if (temp < -int4huge-1) then
+            x = -int4huge-1
+        else if (temp > int4huge) then 
+            x = int4huge
+        else 
+            x = temp
+        end if
+        
+        return
+        end subroutine sub_myAtoi
     
     end module mod_LeeCode001

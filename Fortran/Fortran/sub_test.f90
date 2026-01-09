@@ -75,10 +75,28 @@
     !call sub_convert(trim(s), numRows, sNew)
     !print *, trim(sNew)
     
+    !use mod_LeeCode001
+    !integer(kind=4):: x = -huge(1)-1, xr
+    !call sub_reverse(x, xr)
+    !print *, xr
+    
     use mod_LeeCode001
-    integer(kind=4):: x = -huge(1)-1, xr
-    call sub_reverse(x, xr)
-    print *, xr
+    character(len=200):: s1 = "42"
+    character(len=200):: s2 = " -042"
+    character(len=200):: s3 = "1337c0d3"
+    character(len=200):: s4 = "0-1"
+    character(len=200):: s5 = "words and 987"
+    integer(kind=4):: x
+    call sub_myAtoi(s1, x)
+    print *, x
+    call sub_myAtoi(s2, x)
+    print *, x
+    call sub_myAtoi(s3, x)
+    print *, x
+    call sub_myAtoi(s4, x)
+    print *, x
+    call sub_myAtoi(s5, x)
+    print *, x
     
     return
     end subroutine sub_test
