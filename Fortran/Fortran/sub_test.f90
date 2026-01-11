@@ -98,11 +98,19 @@
     !call sub_myAtoi(s5, x)
     !print *, x
     
+    !use mod_LeeCode001
+    !integer(kind=4):: x = 1234
+    !logical(kind=4):: ISorNOT
+    !call sub_isPalindrome(x, ISorNOT)
+    !print *, ISorNOT
+    
+    ! 123453453334
+    ! ºÃÄÑ£¬aaaaa
     use mod_LeeCode001
-    integer(kind=4):: x = 1234
-    logical(kind=4):: ISorNOT
-    call sub_isPalindrome(x, ISorNOT)
-    print *, ISorNOT
+    character(len=256):: s = '123asf123', p = '.*123'
+    logical(kind=4):: isMatch
+    call sub_isMatch(trim(s), trim(p), isMatch)
+    print *, isMatch
     
     return
     end subroutine sub_test

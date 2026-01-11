@@ -341,5 +341,121 @@
         
         return
         end subroutine sub_isPalindrome
+        
+        
+        
+        !subroutine sub_isMatch(s, p, isornot)
+        !implicit none
+        !character(len=*), intent(in):: s, p
+        !logical(kind=4), intent(out):: isornot
+        !
+        !integer(kind=4):: i, j, plen, slen, k, i1
+        !character(len=1):: si, pj, pjp, sip
+        !
+        !isornot = .true.
+        !slen = len(s)
+        !plen = len(p)
+        !
+        !i = 1
+        !j = 1
+        !do while ((i < slen) .and. (j < plen))
+        !    si = s(i : i)
+        !    sip = s(i+1 : i+1)
+        !    pj = p(j : j)
+        !    pjp = p(j+1 : j+1)
+        !    if (pj == '.') then
+        !        if (pjp == '*') then
+        !            j = j + 2
+        !            if(j <= plen) then
+        !                pj = p(j:j)
+        !                do k = i, slen, 1
+        !                    if (pj == s(k:k)) i1 = k
+        !                end do
+        !            end if
+        !            i = i1
+        !        else                    
+        !            i = i + 1
+        !            j = j + 1
+        !        end if                
+        !    else if(pj == si) then
+        !        if (pjp == '*') then              
+        !            do while (si == sip)
+        !                i = i + 1
+        !                sip = s(i:i)
+        !            end do
+        !            j = j + 2
+        !            cycle
+        !        else 
+        !            i = i + 1
+        !            j = j + 1
+        !            cycle
+        !        end if
+        !    else
+        !        isornot = .false.
+        !        return
+        !    end if
+        !end do
+        !if ((i <= slen) .and. (j <= plen)) then
+        !    si = s(i : i)
+        !    pj = p(j : j)
+        !    if ((pj == '.') .or. (pj == si)) then
+        !        i = i + 1
+        !        j = j + 1
+        !    else
+        !        isornot = .false.
+        !        return
+        !    end if
+        !end if
+        !if ((i <= slen) .or. (j <= plen)) then
+        !    isornot = .false.
+        !    return
+        !end if
+        !
+        !
+        !return
+        !end subroutine sub_isMatch
+        
+        
+        
+        ! len_trim
+        recursive subroutine sub_isMatch(s, p, isMatch)
+        implicit none 
+        character(len=*), intent(in):: s, p
+        logical(kind=4), intent(out):: isMatch
+        
+        logical(kind=4):: curre_isMatch, isMatch01, isMatch02
+        
+        if (len_trim(p) == 0) then
+            isMatch = (len_trim(s) == 0)
+            return
+        end if
+        
+        !curre_isMatch = (len_trim(s) > 0) .and. ((s(1:1) == p(1:1)) .or. (p(1:1) == '.'))
+        if (len_trim(s) == 0) then
+            curre_isMatch = .false.
+        else
+            curre_isMatch = ((s(1:1) == p(1:1)) .or. (p(1:1) == '.'))
+        end if
+        
+        if (len_trim(p) >= 2) then
+            if (p(2:2) == '*') then
+                call sub_isMatch(s, p(3:), isMatch01)
+                if (curre_isMatch) then
+                    call sub_isMatch(s(2:), p, isMatch02)
+                    isMatch = (isMatch01 .or. isMatch02)
+                else            
+                isMatch = isMatch01
+                end if
+            else
+                call sub_isMatch(s(2:), p(2:), isMatch01)
+                isMatch = (curre_isMatch .and. isMatch01)
+            end if
+        else
+            call sub_isMatch(s(2:), p(2:), isMatch01)
+            isMatch = (curre_isMatch .and. isMatch01)
+        end if
+                
+        return
+        end subroutine sub_isMatch
     
     end module mod_LeeCode001

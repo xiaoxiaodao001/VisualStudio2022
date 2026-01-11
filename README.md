@@ -90,7 +90,8 @@ The following shows another example:
  /
 ```
 A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdirectory.
-## 力扣100
+## 力扣100  
+先不追求高级算法，用自己的笨方法做一遍  
 ### 1 两数之和
 给定一个整数数组`nums`和一个整数目标值`target`，
 请你在该数组中找出`和`为目标值`target`的那`两个`整数，
@@ -850,4 +851,96 @@ P     I
     
     end module mod_LeeCode001
 
+```
+
+### 10 正则表达式匹配  
+给你一个字符串`s`和一个字符规律`p`，请你来实现一个支持`'.'`和`'*'`的正则表达式匹配。  
+- `'.'`匹配任意单个字符  
+- `'*'`匹配零个或多个前面的那一个元素  
+所谓匹配，是要涵盖 整个 字符串`s`的，而不是部分字符串。  
+
+**示例 1**：  
+>输入：s = "aa", p = "a"  
+输出：false  
+解释："a" 无法匹配 "aa" 整个字符串。  
+
+**示例 2**:  
+>输入：s = "aa", p = "a*"  
+输出：true  
+解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。
+因此，字符串 "aa" 可被视为 'a' 重复了一次。  
+
+**示例 3**：  
+>输入：s = "ab", p = ".*"  
+输出：true  
+解释："`.*`" 表示可匹配零个或多个（`'*'`）任意字符（`'.'`）。  
+
+提示：  
+
+- `1 <= s.length <= 20`  
+- `1 <= p.length <= 20`  
+- `s`只包含从`a-z`的小写字母。  
+- `p`只包含从`a-z`的小写字母，以及字符`.`和`*`。  
+- 保证每次出现字符`*`时，前面都匹配到有效的字符  
+
+啊啊啊啊啊，好难，想了半天只想出一个不完善的  
+求助AI大人  
+好吧，原来得用递归，单纯循环我想不出来如何做。
+
+```fortran
+    ! 123453453334
+    ! 好难，aaaaa
+    use mod_LeeCode001
+    character(len=256):: s = '123asf123', p = '.*123'
+    logical(kind=4):: isMatch
+    call sub_isMatch(trim(s), trim(p), isMatch)
+    print *, isMatch
+
+
+
+    module mod_LeeCode001
+    implicit none
+    contains
+
+        recursive subroutine sub_isMatch(s, p, isMatch)
+        implicit none 
+        character(len=*), intent(in):: s, p
+        logical(kind=4), intent(out):: isMatch
+        
+        logical(kind=4):: curre_isMatch, isMatch01, isMatch02
+        
+        if (len_trim(p) == 0) then
+            isMatch = (len_trim(s) == 0)
+            return
+        end if
+        
+        !curre_isMatch = (len_trim(s) > 0) .and. ((s(1:1) == p(1:1)) .or. (p(1:1) == '.'))
+        if (len_trim(s) == 0) then
+            curre_isMatch = .false.
+        else
+            curre_isMatch = ((s(1:1) == p(1:1)) .or. (p(1:1) == '.'))
+        end if
+        
+        if (len_trim(p) >= 2) then
+            if (p(2:2) == '*') then
+                call sub_isMatch(s, p(3:), isMatch01)
+                if (curre_isMatch) then
+                    call sub_isMatch(s(2:), p, isMatch02)
+                    isMatch = (isMatch01 .or. isMatch02)
+                else            
+                isMatch = isMatch01
+                end if
+            else
+                call sub_isMatch(s(2:), p(2:), isMatch01)
+                isMatch = (curre_isMatch .and. isMatch01)
+            end if
+        else
+            call sub_isMatch(s(2:), p(2:), isMatch01)
+            isMatch = (curre_isMatch .and. isMatch01)
+        end if
+                
+        return
+        end subroutine sub_isMatch
+    
+    end module mod_LeeCode001
 ```
