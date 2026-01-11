@@ -1,8 +1,9 @@
 ! adjustl  NameList  size
-    module mod_LeeCode001
+    module mod_LeeCode0001
     implicit none
     contains
     
+        ! 两数之和
         subroutine sub_twosum(n, nums, targ, inde)
         implicit none
         integer(kind=4), intent(in):: n, nums(n), targ
@@ -25,6 +26,7 @@
     
     
     
+        ! 两数相加
         subroutine sub_addTwoNumbers(n1, l1, n2, l2, l3)
         implicit none
         integer(kind=4), intent(in):: n1, l1(n1), n2, l2(n2)
@@ -58,6 +60,8 @@
         end subroutine sub_addTwoNumbers
         
         
+        
+        ! 无重复字符的最长字串
         subroutine sub_lengthOfLongestSubstring(s, n)
         implicit none
         character(len=*), intent(in):: s
@@ -81,6 +85,8 @@
         end subroutine sub_lengthOfLongestSubstring
         
         
+        
+        ! 寻找两个正序数组的中位数
         subroutine sub_findMedianSortedArrays(m, nums1, n, nums2, mid)
         implicit none 
         integer(kind=4), intent(in):: m, nums1(m), n, nums2(n)
@@ -124,6 +130,8 @@
         end subroutine sub_findMedianSortedArrays
         
         
+        
+        ! 最长回文子串
         subroutine sub_longestPalindrome(s, subPs)
         implicit none
         character(len=*), intent(in):: s
@@ -168,6 +176,7 @@
         
         
         
+        ! Z字形变换
         subroutine sub_convert(s, numRows, sNew)
         character(len=*), intent(in):: s
         integer(kind=4), intent(in):: numRows
@@ -218,6 +227,7 @@
         
         
         
+        ! 整数反转
         subroutine sub_reverse(x, xr)
         implicit none
         integer(kind=4), intent(in):: x
@@ -247,6 +257,7 @@
         
         
         
+        ! 字符串转换整数
         subroutine sub_myAtoi(s, x)
         character(len=*), intent(in):: s
         integer(kind=4), intent(out):: x
@@ -274,8 +285,7 @@
             else
                 return
             end if
-        end if
-        if (si == '+') then
+        else if (si == '+') then
             i = i + 1
             if (i <= slen) then
                 si = s(i:i)
@@ -312,6 +322,7 @@
         
         
         
+        ! 回文数
         subroutine sub_isPalindrome(x, ISorNOT)
         implicit none
         integer(kind=4), intent(in):: x
@@ -344,80 +355,8 @@
         
         
         
-        !subroutine sub_isMatch(s, p, isornot)
-        !implicit none
-        !character(len=*), intent(in):: s, p
-        !logical(kind=4), intent(out):: isornot
-        !
-        !integer(kind=4):: i, j, plen, slen, k, i1
-        !character(len=1):: si, pj, pjp, sip
-        !
-        !isornot = .true.
-        !slen = len(s)
-        !plen = len(p)
-        !
-        !i = 1
-        !j = 1
-        !do while ((i < slen) .and. (j < plen))
-        !    si = s(i : i)
-        !    sip = s(i+1 : i+1)
-        !    pj = p(j : j)
-        !    pjp = p(j+1 : j+1)
-        !    if (pj == '.') then
-        !        if (pjp == '*') then
-        !            j = j + 2
-        !            if(j <= plen) then
-        !                pj = p(j:j)
-        !                do k = i, slen, 1
-        !                    if (pj == s(k:k)) i1 = k
-        !                end do
-        !            end if
-        !            i = i1
-        !        else                    
-        !            i = i + 1
-        !            j = j + 1
-        !        end if                
-        !    else if(pj == si) then
-        !        if (pjp == '*') then              
-        !            do while (si == sip)
-        !                i = i + 1
-        !                sip = s(i:i)
-        !            end do
-        !            j = j + 2
-        !            cycle
-        !        else 
-        !            i = i + 1
-        !            j = j + 1
-        !            cycle
-        !        end if
-        !    else
-        !        isornot = .false.
-        !        return
-        !    end if
-        !end do
-        !if ((i <= slen) .and. (j <= plen)) then
-        !    si = s(i : i)
-        !    pj = p(j : j)
-        !    if ((pj == '.') .or. (pj == si)) then
-        !        i = i + 1
-        !        j = j + 1
-        !    else
-        !        isornot = .false.
-        !        return
-        !    end if
-        !end if
-        !if ((i <= slen) .or. (j <= plen)) then
-        !    isornot = .false.
-        !    return
-        !end if
-        !
-        !
-        !return
-        !end subroutine sub_isMatch
-        
-        
-        
         ! len_trim
+        ! 正则表达式匹配
         recursive subroutine sub_isMatch(s, p, isMatch)
         implicit none 
         character(len=*), intent(in):: s, p
@@ -458,4 +397,4 @@
         return
         end subroutine sub_isMatch
     
-    end module mod_LeeCode001
+    end module mod_LeeCode0001
