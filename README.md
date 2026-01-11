@@ -92,3 +92,59 @@ The following shows another example:
 A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdirectory.
 ## 力扣100  
 先不追求高级算法，用自己的笨方法做一遍  
+### 11 盛最多水的容器  
+给定一个长度为`n`的整数数组`height`。有`n`条垂线，第`i`条线的两个端点是`(i, 0)`和`(i, height[i])`。  
+找出其中的两条线，使得它们与`x`轴共同构成的容器可以容纳最多的水。  
+返回容器可以储存的最大水量。  
+说明：你不能倾斜容器。   
+
+**示例 1**：  
+
+![](./images/Leecode0011_maxArea1.jpg)  
+>输入：[1,8,6,2,5,4,8,3,7]  
+输出：49  
+解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。
+在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。  
+
+**示例 2**：  
+>输入：height = [1,1]  
+输出：1  
+
+提示：
+- `n == height.length`
+- `2 <= n <= 105`
+- `0 <= height[i] <= 104`
+
+我的答案  
+```fortran
+    use mod_LeeCode0011
+    integer(kind=4):: a(4) = (/ 2, 2, 2, 2 /), maxArea
+    call sub_maxArea(size(a), a, maxArea)
+    print *, maxArea
+
+
+
+    module mod_LeeCode0011
+    implicit none
+    contains
+    
+        subroutine sub_maxArea(n, height, maxArea)
+        implicit none
+        integer(kind=4), intent(in):: n, height(n)
+        integer(kind=4), intent(out):: maxArea
+        
+        integer(kind=4):: i, j, temp
+        
+        maxArea = (n - 1) * min(height(1), height(n))
+        do i = 1, n-1, 1
+            do j = n, i+1, -1
+                temp = (j - i) * min(height(i), height(j))
+                maxArea = max(maxArea, temp)
+            end do
+        end do
+                        
+        return
+        end subroutine sub_maxArea
+    
+    end module mod_LeeCode0011
+```

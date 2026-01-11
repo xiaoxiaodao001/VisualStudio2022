@@ -67,7 +67,7 @@
 
 **示例1**  
 
-![](./images/Leecode002_addtwonumber1.jpg)  
+![](./images/Leecode0002_addtwonumber1.jpg)  
 >输入：l1 = [2,4,3], l2 = [5,6,4]  
 输出：[7,0,8]  
 解释：342 + 465 = 807.
