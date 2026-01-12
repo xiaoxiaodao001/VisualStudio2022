@@ -203,5 +203,59 @@
         
         return
         end subroutine sub_romanToInt
+        
+        
+        
+        subroutine sub_longestCommonPrefix(n, s, p)
+        integer(kind=4), intent(in):: n
+        character(len=200), intent(in):: s(n)
+        character(len=:), allocatable, intent(out):: p
+        
+        integer(kind=4):: silen(n), i, minsilen, j, plen
+        character(len=1), allocatable:: temp(:, :)
+        character(len=:), allocatable:: sitemp
+        character(len=1):: p_i
+        
+        if (n == 1) then
+            p = s(1)
+            return
+        end if
+        
+        minsilen = 200
+        do i = 1, n, 1
+            silen(i) = len_trim(s(i))
+            minsilen = min(minsilen, silen(i))
+        end do
+        if (minsilen == 0) then
+            p = ''
+            return
+        end if
+        
+        allocate(character(len=1):: temp(minsilen, n))
+        allocate(character(len=minsilen):: sitemp)
+        do j = 1, n, 1
+            sitemp = s(j)
+            do i = 1, minsilen, 1
+                temp(i, j) = sitemp(i:i)
+            end do            
+        end do
+        
+        Loop1: do i = 1, minsilen, 1
+            p_i = temp(i, 1)
+            do j = 2, n, 1
+                if (p_i /= temp(i, j)) then
+                    exit Loop1
+                end if
+            end do
+        end do Loop1
+        plen = i - 1
+        ! transfer:: p = transfer(temp(1:plen, 1), p)
+        !p = sitemp(1 : plen)
+        allocate(character(len=plen):: p)
+        p = transfer(temp(1:plen, 1), p)
+        
+        return
+        end subroutine sub_longestCommonPrefix
+        
     
     end module mod_LeeCode0011

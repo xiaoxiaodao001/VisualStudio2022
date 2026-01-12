@@ -89,7 +89,64 @@ The following shows another example:
  iarray(8) = 41, 42, 43
  /
 ```
-A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdirectory.
+A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdirectory.  
+
+### 3 `transfer`  
+**Transformational Intrinsic Function (Generic)**: 
+Converts the bit pattern of the first argument according to the type and kind parameters of the second argument.  
+
+result = TRANSFER (source,mold[,size])  
+
+| source | (Input) Must be a scalar or array (of any data type). |  
+| mold | (Input) Must be a scalar or array (of any data type). It provides the type characteristics (not a value) for the result. |  
+| size | (Input; optional) Must be scalar and of type integer. It provides the number of elements for the output result. |  
+
+**Results**  
+The result has the same type and type parameters as mold.  
+If mold is a scalar and size is omitted, the result is a scalar.  
+If mold is an array and size is omitted, the result is a rank-one array.
+Its size is the smallest that is possible to hold all of source.  
+If size is present, the result is a rank-one array of size size.  
+When the size of source is greater than zero, mold must not be an array with elements of size zero.  
+If the internal representation of the result occupies m bits, 
+and the internal representation of source occupies n bits, 
+then if m > n, the right-most src bits of result contain the bit pattern contained in source, 
+and the m minus n left-most bits of result are undefined. 
+If m < n, then result contains the bit pattern of the right-most m bits of source, 
+and the left-most n minus m bits of source are ignored. 
+Otherwise, the result contains the bit pattern contained in source.  
+
+**Example**  
+TRANSFER (1082130432, 0.0) has the value 4.0 
+(on processors that represent the values 4.0 and 1082130432 as the string of binary digits 0100 0000 1000 0000 0000 0000 0000 0000).  
+TRANSFER ((/2.2, 3.3, 4.4/), ((0.0, 0.0))) results in a scalar whose value is (2.2, 3.3).  
+TRANSFER ((/2.2, 3.3, 4.4/), (/(0.0, 0.0)/)) results in a complex rank-one array of length 2. 
+Its first element is (2.2,3.3) and its second element has a real part with the value 4.4 and an undefined imaginary part.  
+TRANSFER ((/2.2, 3.3, 4.4/), (/(0.0, 0.0)/), 1) results in a complex rank-one array having one element with the value (2.2, 3.3).  
+
+The following shows another example:  
+```fortran
+ COMPLEX CVECTOR(2), CX(1)
+ !  The next statement sets CVECTOR to
+ !  [ 1.1 + 2.2i, 3.3 + 0.0i ]
+ CVECTOR = TRANSFER((/1.1, 2.2, 3.3, 0.0/), &
+                    (/(0.0, 0.0)/))
+ !  The next statement sets CX to [ 1.1 + 2.2i ]
+ CX = TRANSFER((/1.1, 2.2, 3.3/) , (/(0.0, 0.0)/), &
+               SIZE= 1)
+ WRITE(*,*) CVECTOR
+ WRITE(*,*) CX
+ END
+ ```
+ The following example shows an error because the source size is greater than zero 
+ but mold is an array whose elements have zero size:  
+ ```fortran
+CHARACTER(0),PARAMETER :: nothing1(100) = '' 
+PRINT *,SIZE(TRANSFER(111014,nothing1))         ! error
+...
+ ```
+
+
 ## 力扣100  
 先不追求高级算法，用自己的笨方法做一遍  
 ### 11 盛最多水的容器  
@@ -470,3 +527,91 @@ A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdir
     
     end module mod_LeeCode0011
 ```
+
+### 14 最长公共前缀  
+编写一个函数来查找字符串数组中的最长公共前缀。  
+如果不存在公共前缀，返回空字符串`""`。  
+
+**示例 1**：  
+>输入：strs = ["flower","flow","flight"]  
+输出："fl"  
+
+**示例 2**：  
+>输入：strs = ["dog","racecar","car"]  
+输出：""  
+解释：输入不存在公共前缀。   
+
+提示：  
+- `1 <= strs.length <= 200`  
+- `0 <= strs[i].length <= 200`  
+- `strs[i]`如果非空，则仅由小写英文字母组成  
+
+我的答案  
+```fortran
+    use mod_LeeCode0011
+    character(len=200):: s1(3) = ["flower","flow","flight"], s2(3) = ["dog","racecar","car"]
+    character(len=:), allocatable:: p
+    call sub_longestCommonPrefix(size(s1), s1, p)
+    print *, p
+        
+        
+        
+    module mod_LeeCode0011
+    implicit none
+    contains
+    
+        subroutine sub_longestCommonPrefix(n, s, p)
+        integer(kind=4), intent(in):: n
+        character(len=200), intent(in):: s(n)
+        character(len=:), allocatable, intent(out):: p
+        
+        integer(kind=4):: silen(n), i, minsilen, j, plen
+        character(len=1), allocatable:: temp(:, :)
+        character(len=:), allocatable:: sitemp
+        character(len=1):: p_i
+        
+        if (n == 1) then
+            p = s(1)
+            return
+        end if
+        
+        minsilen = 200
+        do i = 1, n, 1
+            silen(i) = len_trim(s(i))
+            minsilen = min(minsilen, silen(i))
+        end do
+        if (minsilen == 0) then
+            p = ''
+            return
+        end if
+        
+        allocate(character(len=1):: temp(minsilen, n))
+        allocate(character(len=minsilen):: sitemp)
+        do j = 1, n, 1
+            sitemp = s(j)
+            do i = 1, minsilen, 1
+                temp(i, j) = sitemp(i:i)
+            end do            
+        end do
+        
+        Loop1: do i = 1, minsilen, 1
+            p_i = temp(i, 1)
+            do j = 2, n, 1
+                if (p_i /= temp(i, j)) then
+                    exit Loop1
+                end if
+            end do
+        end do Loop1
+        plen = i - 1
+        ! transfer:: p = transfer(temp(1:plen, 1), p)
+        !p = sitemp(1 : plen)
+        allocate(character(len=plen):: p)
+        p = transfer(temp(1:plen, 1), p)
+        
+        return
+        end subroutine sub_longestCommonPrefix
+        
+    
+    end module mod_LeeCode0011
+```
+

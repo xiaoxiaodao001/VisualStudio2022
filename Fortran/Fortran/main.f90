@@ -1,12 +1,28 @@
 
     program main
     implicit none
-    !character(len=4):: a='1234', b = '1234'
-    !integer(kind=4):: c(2, 2) = (/ 1, 2, 3, 4, 5 /)
+    !character(len=4):: a='12345', b = '1234', c(2), d
+    !character(len=:), allocatable:: p
+    !character(len=1), allocatable:: temp(:)
+    !integer(kind=4):: c(4) = (/ 1, 2, 3, 4 /)
     !integer(kind=4):: d(4) = (/ 1, 2, 2, 1 /), e(4)
     !integer(kind=4):: i
     !real(kind=8):: pi = 3.14159265358979323846d0, mu_0 = 4.d0 * pi * 1.d-7
     print *, "Hello, world."
+    !c(1) = a
+    !print *, c(1)
+    !!print *, a(1)
+    !d = ''
+    !p = ''
+    !print *, p
+    !print *, len(p)
+    !print *, len_trim(p)
+    !print *, size(c)
+    !
+    !!character(len=:), allocatable:: temp(2)
+    !allocate(character(len=1):: temp(2))
+    !deallocate(temp)
+    !print *, min(c)
     !print *, a(2:)
     !print *, a(1:0)
     !b(1:0) = a(1:0)
