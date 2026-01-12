@@ -245,5 +245,228 @@ A sample program, NAMELIST.F90, is included in the \<install-dir>/samples subdir
     
     end module mod_LeeCode0011
 ```
+### 13 罗马数字转整数  
+罗马数字包含以下七种字符:`I`，`V`，`X`，`L`，`C`，`D`和`M`。  
 
+| 符号 | 值 |  
+| === | === |  
+| I | 1 |  
+| V | | 5 |  
+| X | 10 |  
+| L | 50 |  
+| C | 100 |  
+| D | 500 |  
+| M | 1000 |  
 
+例如， 罗马数字`2`写做`II`，即为两个并列的`1`。`12`写做`XII`，即为`X`+`II`。`27`写做 `XXVII`, 即为`XX`+`V`+`II`。  
+
+通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，
+例如`4`不写做`IIII`，而是`IV`。数字`1`在数字`5`的左边，所表示的数等于大数`5`减小数`1`得到的数值`4`。
+同样地，数字`9`表示为`IX`。这个特殊的规则只适用于以下六种情况：  
+- `I`可以放在`V`(5) 和`X`(10) 的左边，来表示`4`和`9`。  
+- `X`可以放在`L`(50) 和`C`(100) 的左边，来表示`40`和`90`。  
+- `C`可以放在`D`(500) 和`M`(1000) 的左边，来表示`400`和`900`。  
+给定一个罗马数字，将其转换成整数。  
+
+**示例 1**:  
+>输入: s = "III"  
+输出: 3  
+
+**示例 2**:  
+>输入: s = "IV"  
+输出: 4  
+
+**示例 3**:  
+>输入: s = "IX"  
+输出: 9  
+
+**示例 4**:
+>输入: s = "LVIII"  
+输出: 58  
+解释: L = 50, V= 5, III = 3.  
+
+**示例 5**:
+>输入: s = "MCMXCIV"  
+输出: 1994  
+解释: M = 1000, CM = 900, XC = 90, IV = 4.  
+
+提示：  
+- `1 <= s.length <= 15`  
+- `s` 仅含字符 `('I', 'V', 'X', 'L', 'C', 'D', 'M')`  
+- 题目数据保证 `s` 是一个有效的罗马数字，且表示整数在范围 `[1, 3999]` 内  
+- 题目所给测试用例皆符合罗马数字书写规则，不会出现跨位等情况。  
+- IL 和 IM 这样的例子并不符合题目要求，49 应该写作 XLIX，999 应该写作 CMXCIX 。  
+- 关于罗马数字的详尽书写规则，可以参考
+[罗马数字 - 百度百科](https://baike.baidu.com/item/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97/772296)。  
+
+我的答案：
+```fortran
+    
+    use mod_LeeCode0011
+    integer(kind=4):: x = 3749
+    character(len=:), allocatable:: xR
+    call sub_intToRoman(x, xR)
+    print *, xR
+    call sub_romanToInt(xR, x)
+    print *, x
+        
+        
+        
+    module mod_LeeCode0011
+    implicit none
+    contains
+    
+        subroutine sub_romanToInt(xR, x)
+        character(len=*), intent(in):: xR
+        integer(kind=4), intent(out):: x
+        
+        character(len=4):: xRi(0:9, 0:3) =  (/ ' ', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', &
+                                            ' ', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC', &
+                                             ' ', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM', &
+                                             ' ', 'M', 'MM', 'MMM', ' ', ' ', ' ', ' ', ' ', ' ' /)
+        integer(kind=4):: i, i1, i2, xRlen, xRilen
+        character(len=4):: xR3=' ', xR2=' ', xR1=' ', xR0=' ', xRin(4) = ' ', xRii
+        
+        i = 1
+        i1 = i
+        xRlen = len_trim(xR)
+        do while(i <= xRlen)
+            if (xR(i:i) == 'M') then
+                i = i + 1
+            else
+                exit
+            end if            
+        end do
+        i2 = i - 1
+        xR3(1 : (i2-i1+1)) = xR(i1 : i2)
+        
+        do while(i <= xRlen)
+            if ((xR(i:i) == 'C') .or. (xR(i:i) == 'D') .or. (xR(i:i) == 'M')) then
+                i = i + 1
+            else
+                exit
+            end if
+        end do
+        i1 = i2 + 1
+        i2 = i - 1
+        xR2(1 : (i2-i1+1)) = xR(i1 : i2)
+        
+        do while(i <= xRlen)
+            if ((xR(i:i) == 'X') .or. (xR(i:i) == 'L') .or. (xR(i:i) == 'C')) then
+                i = i + 1
+            else
+                exit
+            end if
+        end do
+        i1 = i2 + 1
+        i2 = i - 1
+        xR1(1 : (i2-i1+1)) = xR(i1 : i2)
+        
+        do while(i <= xRlen)
+            if ((xR(i:i) == 'I') .or. (xR(i:i) == 'V') .or. (xR(i:i) == 'X')) then
+                i = i + 1
+            else
+                exit
+            end if
+        end do
+        i1 = i2 + 1
+        i2 = i - 1
+        xR0(1 : (i2-i1+1)) = xR(i1 : i2)
+        
+        x = 0
+        
+        xRilen = len_trim(xR0)
+        i = 1
+        if (xRilen /= 0) then
+            i = i + 1
+            select case(xR0(1:1))
+            case('I')
+                x = x + 1
+                do while(i <= xRilen)
+                    select case(xR0(i:i))
+                    case('I')
+                        x = x + 1
+                        i = i + 1
+                    case('V')
+                        x = x + 5 - 2
+                        i = i + 1
+                    case('X')
+                        x = x + 10 - 2
+                        i = i + 1
+                    end select                    
+                end do
+            case('V')
+                x = x + 5
+                do while(i <= xRilen)
+                    x = x + 1                  
+                    i = i + 1
+                end do
+            end select
+        end if
+        
+        xRilen = len_trim(xR1)
+        i = 1
+        if (xRilen /= 0) then
+            i = i + 1
+            select case(xR1(1:1))
+            case('X')
+                x = x + 10
+                do while(i <= xRilen)
+                    select case(xR1(i:i))
+                    case('X')
+                        x = x + 10
+                        i = i + 1
+                    case('L')
+                        x = x + 50 - 20
+                        i = i + 1
+                    case('C')
+                        x = x + 100 - 20
+                        i = i + 1
+                    end select                    
+                end do
+            case('L')
+                x = x + 50
+                do while(i <= xRilen)
+                    x = x + 10                  
+                    i = i + 1
+                end do
+            end select
+        end if
+        
+        
+        xRilen = len_trim(xR2)
+        i = 1
+        if (xRilen /= 0) then
+            i = i + 1
+            select case(xR2(1:1))
+            case('C')
+                x = x + 100
+                do while(i <= xRilen)
+                    select case(xR2(i:i))
+                    case('C')
+                        x = x + 100
+                        i = i + 1
+                    case('D')
+                        x = x + 500 - 200
+                        i = i + 1
+                    case('M')
+                        x = x + 1000 - 200
+                        i = i + 1
+                    end select                    
+                end do
+            case('D')
+                x = x + 500
+                do while(i <= xRilen)
+                    x = x + 100                  
+                    i = i + 1
+                end do
+            end select
+        end if
+        
+        x = x + len_trim(xR3) * 1000
+        
+        return
+        end subroutine sub_romanToInt
+    
+    end module mod_LeeCode0011
+```

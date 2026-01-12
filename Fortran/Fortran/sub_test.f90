@@ -7,10 +7,12 @@
     !print *, maxArea
     
     use mod_LeeCode0011
-    integer(kind=4):: x = 3749
+    integer(kind=4):: x = 3333
     character(len=:), allocatable:: xR
     call sub_intToRoman(x, xR)
     print *, xR
+    call sub_romanToInt(xR, x)
+    print *, x
     
     
     return
