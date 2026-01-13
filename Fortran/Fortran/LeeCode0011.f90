@@ -332,5 +332,35 @@
         return
         end subroutine sub_threeSum
         
+        
+        
+        subroutine sub_threeSumClosest(n, nums, targe, threeSum)
+        integer(kind=4), intent(in):: n, nums(n), targe
+        integer(kind=4), intent(out):: threeSum
+        
+        integer(kind=4):: i, j, k, numi, numj, numk, temp, disten1, disten2
+        
+        threeSum = sum(nums(1:3))
+        
+        if (n == 3) return
+        disten1 = abs(threeSum - targe)
+        do i = 1, n-2, 1
+            numi = nums(i)
+            do j = i+1, n-1, 1
+                numj = nums(j)
+                do k = j+1, n, 1
+                    numk = nums(k)
+                    temp = numi + numj + numk
+                    disten2 = abs(temp - targe)
+                    if (disten2 < disten1) then
+                        disten1 = disten2
+                        threeSum = temp
+                    end if
+                end do
+            end do
+        end do
+        
+        return
+        end subroutine sub_threeSumClosest
     
     end module mod_LeeCode0011

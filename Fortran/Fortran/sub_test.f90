@@ -26,30 +26,36 @@
     !call sub_longestCommonPrefix(size(s1), s1, p)
     !print *, p
     
+    !use mod_LeeCode0011
+    !integer(kind=4):: num(6) = [-1,0,1,2,-1,-4], i, num2(3)=[0,1,1], num3(3)= [0,0,0]
+    !integer(kind=4), allocatable:: threeSum(:, :)
+    !
+    !call sub_threeSum(size(num), num, threeSum)
+    !do i = 1, size(threeSum, 2), 1
+    !    print *, threeSum(:, i)
+    !end do
+    !deallocate(threeSum)
+    !
+    !print *
+    !call sub_threeSum(size(num2), num2, threeSum)
+    !do i = 1, size(threeSum, 2), 1
+    !    print *, threeSum(:, i)
+    !end do
+    !deallocate(threeSum)
+    !
+    !print *
+    !call sub_threeSum(size(num3), num3, threeSum)
+    !do i = 1, size(threeSum, 2), 1
+    !    print *, threeSum(:, i)
+    !end do
+    !deallocate(threeSum)
+    
     use mod_LeeCode0011
-    integer(kind=4):: num(6) = [-1,0,1,2,-1,-4], i, num2(3)=[0,1,1], num3(3)= [0,0,0]
-    integer(kind=4), allocatable:: threeSum(:, :)
-    
-    call sub_threeSum(size(num), num, threeSum)
-    do i = 1, size(threeSum, 2), 1
-        print *, threeSum(:, i)
-    end do
-    deallocate(threeSum)
-    
-    print *
-    call sub_threeSum(size(num2), num2, threeSum)
-    do i = 1, size(threeSum, 2), 1
-        print *, threeSum(:, i)
-    end do
-    deallocate(threeSum)
-    
-    print *
-    call sub_threeSum(size(num3), num3, threeSum)
-    do i = 1, size(threeSum, 2), 1
-        print *, threeSum(:, i)
-    end do
-    deallocate(threeSum)
-    
+    integer(kind=4):: nums(4) = [-1, 2, 1, -4], targe = 1, threeSum, nums1(3)=0
+    call sub_threeSumClosest(size(nums), nums, targe, threeSum)
+    print *, threeSum
+    call sub_threeSumClosest(size(nums1), nums1, targe, threeSum)
+    print *, threeSum
     
     return
     end subroutine sub_test
