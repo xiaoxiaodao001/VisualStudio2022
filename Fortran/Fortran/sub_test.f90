@@ -14,17 +14,42 @@
     !call sub_romanToInt(xR, x)
     !print *, x
     
+    !use mod_LeeCode0011
+    !character(len=200):: s1(3) = ["flower","flow","flight"], s2(3) = ["dog","racecar","car"]
+    !character(len=:), allocatable:: p
+    !!s(1) = "flower"
+    !!s(2) = "flow"
+    !!s(3) = "flight"
+    !!s(1) = "dog"
+    !!s(2) = "racecar"
+    !!s(3) = "car"
+    !call sub_longestCommonPrefix(size(s1), s1, p)
+    !print *, p
+    
     use mod_LeeCode0011
-    character(len=200):: s1(3) = ["flower","flow","flight"], s2(3) = ["dog","racecar","car"]
-    character(len=:), allocatable:: p
-    !s(1) = "flower"
-    !s(2) = "flow"
-    !s(3) = "flight"
-    !s(1) = "dog"
-    !s(2) = "racecar"
-    !s(3) = "car"
-    call sub_longestCommonPrefix(size(s1), s1, p)
-    print *, p
+    integer(kind=4):: num(6) = [-1,0,1,2,-1,-4], i, num2(3)=[0,1,1], num3(3)= [0,0,0]
+    integer(kind=4), allocatable:: threeSum(:, :)
+    
+    call sub_threeSum(size(num), num, threeSum)
+    do i = 1, size(threeSum, 2), 1
+        print *, threeSum(:, i)
+    end do
+    deallocate(threeSum)
+    
+    print *
+    call sub_threeSum(size(num2), num2, threeSum)
+    do i = 1, size(threeSum, 2), 1
+        print *, threeSum(:, i)
+    end do
+    deallocate(threeSum)
+    
+    print *
+    call sub_threeSum(size(num3), num3, threeSum)
+    do i = 1, size(threeSum, 2), 1
+        print *, threeSum(:, i)
+    end do
+    deallocate(threeSum)
+    
     
     return
     end subroutine sub_test

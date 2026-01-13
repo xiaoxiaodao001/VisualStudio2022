@@ -257,5 +257,80 @@
         return
         end subroutine sub_longestCommonPrefix
         
+        
+        
+        subroutine sub_threeSum(n, num, threeSum)
+        integer(kind=4), intent(in):: n, num(n)
+        integer(kind=4), allocatable, intent(out):: threeSum(:, :)
+        
+        integer(kind=4):: i, j, k, numi, numj, numk, twosum, threeNum, count, numi1, numj1, numk1, tempi(3), count1, tempj(3)
+        real(kind=8):: realthreeNum = 1.d0
+        integer(kind=4), allocatable:: temp(:, :), threeNumi(:)
+        
+        if (n == 3) then
+            if (sum(num) == 0) then
+                allocate(threeSum(3, 1))
+                threeSum(:, 1) = num
+            else
+                allocate(threeSum(3, 0))
+            end if
+            return
+        end if
+        i = min(3, n-3)
+        do j = 1, i, 1
+            realthreeNum = realthreeNum * real(n-i+j, kind=8) / real(j, kind=8)
+        end do
+        threeNum = int(realthreeNum)
+        allocate(temp(3, threeNum))
+        count = 0
+        do i = 1, n-2, 1
+            numi = num(i)
+            twosum = 0 - numi
+            do j = i+1, n-1, 1
+                numj = num(j)
+                numk = twosum - numj
+                do k = j+1, n, 1
+                    if (numk == num(k)) then
+                        count = count + 1
+                        numi1 = min(numi, numj, numk)
+                        numk1 = max(numi, numj, numk)
+                        numj1 = 0 - numi1 - numk1
+                        temp(:, count) = [numi1, numj1, numk1]
+                    end if
+                end do
+            end do
+        end do
+        if (count == 0) then
+            allocate(threeSum(3, 0))
+            return
+        end if
+        
+        allocate(threeNumi(count))
+        threeNumi = 1
+        count1 = count
+        do i = 1, count-1, 1
+            if (threeNumi(i) == 0) cycle
+            tempi = temp(:, i)
+            do j = i+1, count, 1
+                if (threeNumi(j) == 0) cycle
+                tempj = temp(:, j)
+                if (all(tempi == tempj)) then
+                    count1 = count1 - 1
+                    threeNumi(j) = 0
+                end if
+            end do
+        end do
+        allocate(threeSum(3, count1))
+        j = 0
+        do i = 1, count, 1
+            if (threeNumi(i) == 1) then
+                j = j + 1
+                threeSum(:, j) = temp(:, i)
+            end if
+        end do
+        
+        return
+        end subroutine sub_threeSum
+        
     
     end module mod_LeeCode0011

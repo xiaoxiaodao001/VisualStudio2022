@@ -615,3 +615,139 @@ PRINT *,SIZE(TRANSFER(111014,nothing1))         ! error
     end module mod_LeeCode0011
 ```
 
+### 15 三数之和  
+给你一个整数数组`nums`，判断是否存在三元组`[nums[i], nums[j], nums[k]]`满足`i != j`、`i != k`且`j != k`，
+同时还满足`nums[i] + nums[j] + nums[k] == 0`。请你返回所有和为`0`且不重复的三元组。  
+注意：答案中不可以包含重复的三元组。  
+
+**示例 1**：  
+>输入：nums = [-1,0,1,2,-1,-4]   
+输出：[[-1,-1,2],[-1,0,1]]  
+解释：   
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。  
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。  
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。  
+不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。  
+注意，输出的顺序和三元组的顺序并不重要。  
+
+**示例 2**：
+>输入：nums = [0,1,1]  
+输出：[]  
+解释：唯一可能的三元组和不为 0 。  
+
+**示例 3**：  
+>输入：nums = [0,0,0]  
+输出：[[0,0,0]]  
+解释：唯一可能的三元组和为 0 。  
+
+提示：
+- `3 <= nums.length <= 3000`
+- `-10^5 <= nums[i] <= 10^5`
+
+```fortran    
+    use mod_LeeCode0011
+    integer(kind=4):: num(6) = [-1,0,1,2,-1,-4], i, num2(3)=[0,1,1], num3(3)= [0,0,0]
+    integer(kind=4), allocatable:: threeSum(:, :)
+    
+    call sub_threeSum(size(num), num, threeSum)
+    do i = 1, size(threeSum, 2), 1
+        print *, threeSum(:, i)
+    end do
+    deallocate(threeSum)
+    
+    print *
+    call sub_threeSum(size(num2), num2, threeSum)
+    do i = 1, size(threeSum, 2), 1
+        print *, threeSum(:, i)
+    end do
+    deallocate(threeSum)
+    
+    print *
+    call sub_threeSum(size(num3), num3, threeSum)
+    do i = 1, size(threeSum, 2), 1
+        print *, threeSum(:, i)
+    end do
+    deallocate(threeSum)
+        
+        
+        
+    module mod_LeeCode0011
+    implicit none
+    contains
+
+        subroutine sub_threeSum(n, num, threeSum)
+        integer(kind=4), intent(in):: n, num(n)
+        integer(kind=4), allocatable, intent(out):: threeSum(:, :)
+        
+        integer(kind=4):: i, j, k, numi, numj, numk, twosum, threeNum, count, numi1, numj1, numk1, tempi(3), count1, tempj(3)
+        real(kind=8):: realthreeNum = 1.d0
+        integer(kind=4), allocatable:: temp(:, :), threeNumi(:)
+        
+        if (n == 3) then
+            if (sum(num) == 0) then
+                allocate(threeSum(3, 1))
+                threeSum(:, 1) = num
+            else
+                allocate(threeSum(3, 0))
+            end if
+            return
+        end if
+        i = min(3, n-3)
+        do j = 1, i, 1
+            realthreeNum = realthreeNum * real(n-i+j, kind=8) / real(j, kind=8)
+        end do
+        threeNum = int(realthreeNum)
+        allocate(temp(3, threeNum))
+        count = 0
+        do i = 1, n-2, 1
+            numi = num(i)
+            twosum = 0 - numi
+            do j = i+1, n-1, 1
+                numj = num(j)
+                numk = twosum - numj
+                do k = j+1, n, 1
+                    if (numk == num(k)) then
+                        count = count + 1
+                        numi1 = min(numi, numj, numk)
+                        numk1 = max(numi, numj, numk)
+                        numj1 = 0 - numi1 - numk1
+                        temp(:, count) = [numi1, numj1, numk1]
+                    end if
+                end do
+            end do
+        end do
+        if (count == 0) then
+            allocate(threeSum(3, 0))
+            return
+        end if
+        
+        allocate(threeNumi(count))
+        threeNumi = 1
+        count1 = count
+        do i = 1, count-1, 1
+            if (threeNumi(i) == 0) cycle
+            tempi = temp(:, i)
+            do j = i+1, count, 1
+                if (threeNumi(j) == 0) cycle
+                tempj = temp(:, j)
+                if (all(tempi == tempj)) then
+                    count1 = count1 - 1
+                    threeNumi(j) = 0
+                end if
+            end do
+        end do
+        allocate(threeSum(3, count1))
+        j = 0
+        do i = 1, count, 1
+            if (threeNumi(i) == 1) then
+                j = j + 1
+                threeSum(:, j) = temp(:, i)
+            end if
+        end do
+        
+        return
+        end subroutine sub_threeSum
+        
+    
+    end module mod_LeeCode0011
+```

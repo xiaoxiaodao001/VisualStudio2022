@@ -3,12 +3,19 @@
     implicit none
     !character(len=4):: a='12345', b = '1234', c(2), d
     !character(len=:), allocatable:: p
+    !integer(kind=4):: a(2, 1), b(2), c(2, 0), a1 = 1, a2 = 2, a3 = 3
+    !integer(kind=4), allocatable:: d(:, :)
     !character(len=1), allocatable:: temp(:)
     !integer(kind=4):: c(4) = (/ 1, 2, 3, 4 /)
     !integer(kind=4):: d(4) = (/ 1, 2, 2, 1 /), e(4)
     !integer(kind=4):: i
     !real(kind=8):: pi = 3.14159265358979323846d0, mu_0 = 4.d0 * pi * 1.d-7
+    !b = [a1, a2]
+    !d = b
     print *, "Hello, world."
+    !print *, size(a, 2)
+    !print *, size(c, 2)
+    !print *, size(b, 2)
     !c(1) = a
     !print *, c(1)
     !!print *, a(1)
