@@ -2,6 +2,7 @@
     program main
     implicit none
     !character(len=4):: a='12345', b = '1234', c(2), d
+    character(len=1):: a, b='1'
     !character(len=:), allocatable:: p
     !integer(kind=4):: a(2, 1), b(2), c(2, 0), a1 = 1, a2 = 2, a3 = 3
     !integer(kind=4), allocatable:: d(:, :)
@@ -13,6 +14,8 @@
     !b = [a1, a2]
     !d = b
     print *, "Hello, world."
+    !a = b + 1
+    !print *, ichar("12")
     !print *, size(a, 2)
     !print *, size(c, 2)
     !print *, size(b, 2)

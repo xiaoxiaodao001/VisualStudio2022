@@ -818,3 +818,114 @@ nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
     
     end module mod_LeeCode0011
 ```
+
+### 17 电话号码的字母组合  
+给定一个仅包含数字`2-9`的字符串，返回所有它能表示的字母组合。答案可以按**任意顺序**返回。  
+给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。  
+![](https://pic.leetcode.cn/1752723054-mfIHZs-image.png)  
+
+**示例 1**：  
+>**输入**：digits = "23"  
+**输出**：["ad","ae","af","bd","be","bf","cd","ce","cf"]  
+
+**示例 2**：  
+>**输入**：digits = "2"  
+**输出**：["a","b","c"]  
+
+提示：
+- `1 <= digits.length <= 4`  
+- `digits[i]` 是范围 `['2', '9']` 的一个数字。  
+
+我的答案
+```fortran    
+    use mod_LeeCode0011
+    character(len=4):: digits = '2'
+    character(len=:), allocatable:: s(:)
+    call sub_letterCombinations(len_trim(digits), digits, s)
+    print *, s
+        
+        
+        
+    module mod_LeeCode0011
+    implicit none
+    contains
+        
+        subroutine sub_letterCombinations(n, digits, s)
+        integer(kind=4), intent(in):: n
+        character(len=n), intent(in):: digits
+        
+        character(len=:), allocatable, intent(out):: s(:)
+        
+        integer(kind=4):: num, d2snum(2:9) = [3, 3, 3, 3, 3, 4, 3, 4], ichar0, dig2num(n), i, j, num1, num2, num3, num4, i1, i2, i3, i4, ind=0
+        character(len=1):: d2s(4, 2:9) = ['a', 'b', 'c', ' ',    'd', 'e', 'f', ' ',    &
+                                        'g', 'h', 'i', ' ',    'j', 'k', 'l', ' ',    'm', 'n', 'o', ' ', &
+                                        'p', 'q', 'r', 's',    't', 'u', 'v', ' ',    'w', 'x', 'y', 'z'], s1
+        character(len=2):: s2
+        character(len=3):: s3
+        
+        ichar0 = ichar("0")
+        do i = 1, n, 1
+            dig2num(i) = ichar(digits(i:i)) - ichar0
+        end do
+        
+        select case(n)
+        case (1)
+            num = d2snum(dig2num(1))
+            allocate(character(len=1):: s(num))
+            s = d2s(1:num, dig2num(1))
+            return
+        case (2)
+            num1 = d2snum(dig2num(1)) 
+            num2 = d2snum(dig2num(2))            
+            num = num1 * num2
+            allocate(character(len=2):: s(num))
+            do i1 = 1, num1
+                s1 = d2s(i1, dig2num(1))
+                do i2 = 1, num2
+                    ind = ind + 1
+                    s(ind) = s1 // d2s(i2, dig2num(2))
+                end do
+            end do
+        case (3)
+            num1 = d2snum(dig2num(1)) 
+            num2 = d2snum(dig2num(2))            
+            num3 = d2snum(dig2num(3))            
+            num = num1 * num2 * num3
+            allocate(character(len=3):: s(num))
+            do i1 = 1, num1
+                s1 = d2s(i1, dig2num(1))
+                do i2 = 1, num2                    
+                    s2 = s1 // d2s(i2, dig2num(2))
+                    do i3 = 1, num3
+                        ind = ind + 1
+                        s(ind) = s2 // d2s(i3, dig2num(3))
+                    end do
+                end do
+            end do
+        case (4)
+            num1 = d2snum(dig2num(1)) 
+            num2 = d2snum(dig2num(2))            
+            num3 = d2snum(dig2num(3))            
+            num4 = d2snum(dig2num(4))            
+            num = num1 * num2 * num3 * num4
+            allocate(character(len=3):: s(num))
+            do i1 = 1, num1
+                s1 = d2s(i1, dig2num(1))
+                do i2 = 1, num2                    
+                    s2 = s1 // d2s(i2, dig2num(2))
+                    do i3 = 1, num3
+                        s3 = s2 // d2s(i3, dig2num(3))
+                        do i4 = 1, num4
+                            ind = ind + 1
+                            s(ind) = s3 // d2s(i4, dig2num(4))
+                        end do
+                    end do
+                end do
+            end do
+        end select
+        
+        return
+        end subroutine sub_letterCombinations
+    
+    end module mod_LeeCode0011
+```

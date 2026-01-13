@@ -50,12 +50,18 @@
     !end do
     !deallocate(threeSum)
     
+    !use mod_LeeCode0011
+    !integer(kind=4):: nums(4) = [-1, 2, 1, -4], targe = 1, threeSum, nums1(3)=0
+    !call sub_threeSumClosest(size(nums), nums, targe, threeSum)
+    !print *, threeSum
+    !call sub_threeSumClosest(size(nums1), nums1, targe, threeSum)
+    !print *, threeSum
+    
     use mod_LeeCode0011
-    integer(kind=4):: nums(4) = [-1, 2, 1, -4], targe = 1, threeSum, nums1(3)=0
-    call sub_threeSumClosest(size(nums), nums, targe, threeSum)
-    print *, threeSum
-    call sub_threeSumClosest(size(nums1), nums1, targe, threeSum)
-    print *, threeSum
+    character(len=4):: digits = '2'
+    character(len=:), allocatable:: s(:)
+    call sub_letterCombinations(len_trim(digits), digits, s)
+    print *, s
     
     return
     end subroutine sub_test

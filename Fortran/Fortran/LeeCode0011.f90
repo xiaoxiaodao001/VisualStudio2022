@@ -362,5 +362,84 @@
         
         return
         end subroutine sub_threeSumClosest
+        
+        
+        
+        subroutine sub_letterCombinations(n, digits, s)
+        integer(kind=4), intent(in):: n
+        character(len=n), intent(in):: digits
+        
+        character(len=:), allocatable, intent(out):: s(:)
+        
+        integer(kind=4):: num, d2snum(2:9) = [3, 3, 3, 3, 3, 4, 3, 4], ichar0, dig2num(n), i, j, num1, num2, num3, num4, i1, i2, i3, i4, ind=0
+        character(len=1):: d2s(4, 2:9) = ['a', 'b', 'c', ' ',    'd', 'e', 'f', ' ',    &
+                                        'g', 'h', 'i', ' ',    'j', 'k', 'l', ' ',    'm', 'n', 'o', ' ', &
+                                        'p', 'q', 'r', 's',    't', 'u', 'v', ' ',    'w', 'x', 'y', 'z'], s1
+        character(len=2):: s2
+        character(len=3):: s3
+        
+        ichar0 = ichar("0")
+        do i = 1, n, 1
+            dig2num(i) = ichar(digits(i:i)) - ichar0
+        end do
+        
+        select case(n)
+        case (1)
+            num = d2snum(dig2num(1))
+            allocate(character(len=1):: s(num))
+            s = d2s(1:num, dig2num(1))
+            return
+        case (2)
+            num1 = d2snum(dig2num(1)) 
+            num2 = d2snum(dig2num(2))            
+            num = num1 * num2
+            allocate(character(len=2):: s(num))
+            do i1 = 1, num1
+                s1 = d2s(i1, dig2num(1))
+                do i2 = 1, num2
+                    ind = ind + 1
+                    s(ind) = s1 // d2s(i2, dig2num(2))
+                end do
+            end do
+        case (3)
+            num1 = d2snum(dig2num(1)) 
+            num2 = d2snum(dig2num(2))            
+            num3 = d2snum(dig2num(3))            
+            num = num1 * num2 * num3
+            allocate(character(len=3):: s(num))
+            do i1 = 1, num1
+                s1 = d2s(i1, dig2num(1))
+                do i2 = 1, num2                    
+                    s2 = s1 // d2s(i2, dig2num(2))
+                    do i3 = 1, num3
+                        ind = ind + 1
+                        s(ind) = s2 // d2s(i3, dig2num(3))
+                    end do
+                end do
+            end do
+        case (4)
+            num1 = d2snum(dig2num(1)) 
+            num2 = d2snum(dig2num(2))            
+            num3 = d2snum(dig2num(3))            
+            num4 = d2snum(dig2num(4))            
+            num = num1 * num2 * num3 * num4
+            allocate(character(len=3):: s(num))
+            do i1 = 1, num1
+                s1 = d2s(i1, dig2num(1))
+                do i2 = 1, num2                    
+                    s2 = s1 // d2s(i2, dig2num(2))
+                    do i3 = 1, num3
+                        s3 = s2 // d2s(i3, dig2num(3))
+                        do i4 = 1, num4
+                            ind = ind + 1
+                            s(ind) = s3 // d2s(i4, dig2num(4))
+                        end do
+                    end do
+                end do
+            end do
+        end select
+        
+        return
+        end subroutine sub_letterCombinations
     
     end module mod_LeeCode0011
